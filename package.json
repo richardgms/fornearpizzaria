@@ -1,0 +1,16 @@
+{
+  "name": "fornear-pizzaria",
+  "version": "1.0.0",
+  "description": "Landing Page da Fornear Pizzaria - Artesanal Italiana",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx browser-sync start --server --files \"index.html, assets/**/*, support.js\" --no-notify"
+  },
+  "keywords": [
+    "pizzaria",
+    "artesanal",
+    "landing-page"
+  ],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <title>Fornear Pizzaria — Artesanal Italiana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'DM Serif Display';
+      src: url('fonts/DMSerifDisplay-Regular.ttf') format('truetype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'DM Serif Display';
+      src: url('fonts/DMSerifDisplay-Italic.ttf') format('truetype');
+      font-weight: 400; font-style: italic; font-display: swap;
+    }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: #F4F1DC; -webkit-font-smoothing: antialiased; }
+    a { color: #294C31; }
+    a:hover { color: #C94F2F; }
+    /* Ajustes mobile — comportamentos impossíveis via inline style */
+    #menu-toggle {
+      display: none;
+    }
+    @media (max-width: 820px) {
+      #topbar { display: none !important; }
+      #site-header { position: relative !important; padding: 16px 20px !important; }
+      #menu-toggle {
+        display: block !important;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        z-index: 60;
+      }
+      #nav-menu {
+        display: none !important; /* Oculto por padrão no mobile */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #F4F1DC;
+        border-bottom: 1px solid rgba(41,76,49,0.15);
+        border-top: 1px solid rgba(41,76,49,0.15);
+        padding: 24px 0 16px !important;
+        z-index: 100;
+        flex-direction: column;
+        gap: 16px !important;
+        box-sizing: border-box !important;
+      }
+      #nav-menu.active {
+        display: flex !important; /* Exibido quando ativo */
+      }
+      #nav-menu a {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        text-align: center;
+        padding: 12px 16px !important;
+        font-size: 14px !important;
+      }
+      #hero-buttons {
+        flex-wrap: nowrap !important;
+        gap: 10px !important;
+      }
+      #hero-buttons a {
+        flex: 1 1 0% !important;
+        padding: 14px 4px !important;
+        font-size: 12px !important;
+        text-align: center;
+        letter-spacing: 0.05em !important;
+        white-space: nowrap;
+      }
+      #salva-bordas-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 16px !important;
+      }
+      #salva-bordas-grid > div:nth-child(3) {
+        grid-column: span 2 !important;
+        justify-self: center !important;
+        width: 100% !important;
+        max-width: 240px !important;
+      }
+    }
+    @media (max-width: 1020px) {
+      #processo-intro { position: static !important; }
+      #strip { display: grid !important; grid-template-columns: 1fr 1fr; gap: 0 !important; padding: 0 !important; font-size: 11.5px !important; letter-spacing: 0.14em !important; }
+      #strip [data-sep] { display: none; }
+      #strip > span:not([data-sep]) { padding: 16px 10px; display: flex; align-items: center; justify-content: center; border-top: 1px solid rgba(244,241,220,0.18); }
+      #strip > span:nth-of-type(1), #strip > span:nth-of-type(3) { border-top: none; }
+      #strip > span:nth-of-type(3), #strip > span:nth-of-type(7) { border-left: 1px solid rgba(244,241,220,0.18); }
+    }
+  </style>
+</helmet>
+
+<div style="font-family: Lora, Georgia, serif; color: #294C31; background: #F4F1DC; min-width: 320px">
+
+  <!-- ============ TOP BAR ============ -->
+  <sc-if value="{{ showTopBar }}" hint-placeholder-val="{{ true }}">
+    <div id="topbar" data-screen-label="Barra superior" style="background: #294C31; color: #F4F1DC; display: flex; justify-content: center; align-items: center; gap: 32px; padding: 9px 20px; font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; flex-wrap: wrap; text-align: center">
+      <span>Ter–Dom · 18h às 23h</span>
+      <span data-sep="true" style="opacity: 0.45">•</span>
+      <span>Entrega em toda Santa Rita e Bayeux</span>
+      <span data-sep="true" style="opacity: 0.45">•</span>
+      <span>(83) 98769-0157</span>
+    </div>
+  </sc-if>
+
+  <!-- ============ HEADER ============ -->
+  <header id="site-header" data-screen-label="Cabeçalho" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 16px clamp(20px, 4vw, 48px); border-bottom: 1px solid rgba(41,76,49,0.18); position: sticky; top: 0; background: rgba(244,241,220,0.94); backdrop-filter: blur(8px); z-index: 50">
+    <a href="#topo" style="text-decoration: none; display: flex; flex-direction: column; line-height: 1">
+      <span style="font-family: 'DM Serif Display', serif; font-size: 26px; color: #294C31; letter-spacing: 0.02em">FORNEAR</span>
+      <span style="font-family: Oswald, sans-serif; font-size: 10px; letter-spacing: 0.42em; color: #C94F2F; text-transform: uppercase; margin-top: 3px">Pizzaria · Artesanal Italiana</span>
+    </a>
+    <button id="menu-toggle" aria-label="Abrir menu" style="display: none;">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#294C31" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <nav id="nav-menu" style="display: flex; align-items: center; gap: clamp(14px, 2.5vw, 28px); flex-wrap: wrap; font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase">
+      <a href="#processo" style="text-decoration: none">Processo</a>
+      <a href="#insumos" style="text-decoration: none">Insumos</a>
+      <a href="#sabores" style="text-decoration: none">Sabores</a>
+      <a href="#entrega" style="text-decoration: none">Entrega</a>
+      <a href="https://app.cardapioweb.com/fornear" target="_blank" rel="noopener" style="text-decoration: none; background: #C94F2F; color: #F4F1DC; padding: 11px 24px; letter-spacing: 0.14em" style-hover="background: #294C31; color: #F4F1DC">Pedir agora</a>
+    </nav>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="topo" data-screen-label="Hero" style="padding: clamp(48px, 8vw, 88px) clamp(20px, 4vw, 48px) 72px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: clamp(40px, 5vw, 64px); align-items: center">
+    <div>
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 28px">
+        <div style="width: 40px; height: 3px; background: #C94F2F"></div>
+        <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: #C94F2F">A 1ª pizzaria artesanal italiana de Santa Rita–PB</span>
+      </div>
+      <h1 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(48px, 6.5vw, 84px); line-height: 1.02; margin: 0 0 28px; color: #294C31">Da tradição italiana <em style="color: #C94F2F">à sua mesa</em></h1>
+      <p style="font-size: 19px; line-height: 1.65; margin: 0 0 40px; max-width: 52ch; color: rgba(41,76,49,0.85)">Massa de longa fermentação, farinha italiana tipo 00 e molho preparado na casa. Cada pizza é aberta à mão e criada com o tempo que a qualidade exige.</p>
+      <div id="hero-buttons" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center">
+        <a href="https://app.cardapioweb.com/fornear" target="_blank" rel="noopener" style="text-decoration: none; background: #294C31; color: #F4F1DC; font-family: Oswald, sans-serif; font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; padding: 18px 36px" style-hover="background: #C94F2F; color: #F4F1DC">Ver cardápio e pedir</a>
+        <a href="#processo" style="text-decoration: none; font-family: Oswald, sans-serif; font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; padding: 17px 30px; border: 1px solid #294C31" style-hover="border-color: #C94F2F; color: #C94F2F">Nosso processo</a>
+      </div>
+      <p style="font-family: Oswald, sans-serif; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(41,76,49,0.6); margin: 26px 0 0">Produção limited — respeitamos o tempo de fermentação de cada massa</p>
+    </div>
+    <div style="position: relative">
+      <div style="aspect-ratio: 4 / 5; border: 1px solid rgba(41,76,49,0.25); overflow: hidden; display: flex; align-items: center; justify-content: center">
+        <img src="assets/hero.jpg" alt="Pizza artesanal do Fornear vista de cima" style="width: 100%; height: 100%; object-fit: cover" />
+      </div>
+      <div style="position: absolute; bottom: -22px; left: clamp(-22px, -2vw, 0px); background: #C94F2F; color: #F4F1DC; padding: 18px 24px; max-width: 220px">
+        <span style="font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1.2; display: block">Qualidade não é pressa. É processo.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STRIP ============ -->
+  <div id="strip" data-screen-label="Faixa de diferenciais" style="background: #294C31; color: #F4F1DC; padding: 18px 24px; display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; font-family: Oswald, sans-serif; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; text-align: center">
+    <span>Massa de longa fermentação</span>
+    <span data-sep="true" style="color: #E8946F">✦</span>
+    <span>Farinha italiana tipo 00</span>
+    <span data-sep="true" style="color: #E8946F">✦</span>
+    <span>Molho artesanal da casa</span>
+    <span data-sep="true" style="color: #E8946F">✦</span>
+    <span>Preparo 100% manual</span>
+  </div>
+
+  <!-- ============ PROCESSO ============ -->
+  <section id="processo" data-screen-label="Processo" style="padding: clamp(64px, 9vw, 104px) clamp(20px, 4vw, 48px); max-width: 1200px; margin: 0 auto">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: clamp(36px, 5vw, 64px); align-items: start">
+      <div id="processo-intro" style="position: sticky; top: 120px">
+        <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: #C94F2F">Nosso processo</span>
+        <h2 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(36px, 4.5vw, 56px); line-height: 1.05; margin: 18px 0 24px">Farinha, água, sal e fermento. O restante vem do tempo.</h2>
+        <p style="font-size: 17px; line-height: 1.7; color: rgba(41,76,49,0.85); margin: 0">Nossa massa leva apenas quatro ingredientes. O diferencial não está em adicionar — está em saber trabalhar o básico com técnica e paciência.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 0">
+        <sc-for list="{{ etapas }}" as="etapa" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: 72px 1fr; gap: 24px; padding: 32px 0; border-top: 1px solid rgba(41,76,49,0.2)">
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; line-height: 1">
+              <span style="font-family: 'DM Serif Display', serif; font-size: 44px; color: #C94F2F; line-height: 1">{{ etapa.num }}</span>
+              <sc-if value="{{ etapa.num == '01' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C94F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wheat"><path d="M2 22 16 8"></path><path d="M3.47 12.53 5 14l1.53-1.47a3 3 0 0 0-3-3.06z"></path><path d="M9.47 6.53 11 8l1.53-1.47a3 3 0 0 0-3-3.06z"></path><path d="M6.53 9.47 8 11l1.47-1.53a3 3 0 0 0-3.06-3z"></path><path d="M12.53 3.47 14 5l1.47-1.53a3 3 0 0 0-3.06-3z"></path><path d="M14 16c1.5-1.5 2.5-3.5 3-5.5a9 9 0 0 0-3 3c-.5 2-1.5 4-3 5.5Z"></path><path d="M20 10c1.5-1.5 2.5-3.5 3-5.5a9 9 0 0 0-3 3c-.5 2-1.5 4-3 5.5Z"></path><path d="M18 18c-1.5 1.5-3.5 2.5-5.5 3a9 9 0 0 0 3-3c2-.5 4-1.5 5.5-3Z"></path><path d="M22 14c-1.5 1.5-3.5 2.5-5.5 3a9 9 0 0 0 3-3c2-.5 4-1.5 5.5-3Z"></path></svg>
+              </sc-if>
+              <sc-if value="{{ etapa.num == '02' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C94F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hourglass"><path d="M5 2h14"></path><path d="M5 22h14"></path><path d="M19 2v4c0 1.38-.6 2.68-1.66 3.68L12 15l-5.34-5.32C5.6 8.68 5 7.38 5 6V2"></path><path d="M12 15l5.34 5.32c1.06 1 1.66 2.3 1.66 3.68v1H5v-1c0-1.38.6-2.68 1.66-3.68L12 15Z"></path></svg>
+              </sc-if>
+              <sc-if value="{{ etapa.num == '03' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C94F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chef-hat"><path d="M6 18V6a4 4 0 0 1 8 0v12"></path><path d="M18 18V9a4 4 0 0 0-8 0v9"></path><path d="M3 18h18a2 2 0 0 1 2 2v2H1a2 2 0 0 1 2-2Z"></path></svg>
+              </sc-if>
+              <sc-if value="{{ etapa.num == '04' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C94F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+              </sc-if>
+            </div>
+            <div>
+              <h3 style="font-family: Oswald, sans-serif; font-weight: 500; font-size: 16px; letter-spacing: 0.18em; text-transform: uppercase; margin: 6px 0 10px">{{ etapa.titulo }}</h3>
+              <p style="font-size: 16px; line-height: 1.65; color: rgba(41,76,49,0.8); margin: 0">{{ etapa.texto }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INSUMOS ============ -->
+  <section id="insumos" data-screen-label="Insumos" style="background: #294C31; color: #F4F1DC; padding: clamp(64px, 9vw, 104px) clamp(20px, 4vw, 48px)">
+    <div style="max-width: 1200px; margin: 0 auto">
+      <div style="text-align: center; margin-bottom: 64px">
+        <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: #E8946F">Ingredientes selecionados</span>
+        <h2 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(36px, 4.5vw, 56px); line-height: 1.08; margin: 18px auto 0; max-width: 18ch">Porque qualidade começa na base</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 24px">
+        <sc-for list="{{ insumos }}" as="insumo" hint-placeholder-count="3">
+          <div style="border: 1px solid rgba(244,241,220,0.25); padding: 36px 32px; display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+              <span style="font-family: Oswald, sans-serif; font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: #E8946F">{{ insumo.tag }}</span>
+              <sc-if value="{{ insumo.tag == 'Farinha' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8946F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wheat"><path d="M2 22 16 8"></path><path d="M3.47 12.53 5 14l1.53-1.47a3 3 0 0 0-3-3.06z"></path><path d="M9.47 6.53 11 8l1.53-1.47a3 3 0 0 0-3-3.06z"></path><path d="M6.53 9.47 8 11l1.47-1.53a3 3 0 0 0-3.06-3z"></path><path d="M12.53 3.47 14 5l1.47-1.53a3 3 0 0 0-3.06-3z"></path><path d="M14 16c1.5-1.5 2.5-3.5 3-5.5a9 9 0 0 0-3 3c-.5 2-1.5 4-3 5.5Z"></path><path d="M20 10c1.5-1.5 2.5-3.5 3-5.5a9 9 0 0 0-3 3c-.5 2-1.5 4-3 5.5Z"></path><path d="M18 18c-1.5 1.5-3.5 2.5-5.5 3a9 9 0 0 0 3-3c2-.5 4-1.5 5.5-3Z"></path><path d="M22 14c-1.5 1.5-3.5 2.5-5.5 3a9 9 0 0 0 3-3c2-.5 4-1.5 5.5-3Z"></path></svg>
+              </sc-if>
+              <sc-if value="{{ insumo.tag == 'Molho' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8946F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cooking-pot"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="M4 8h16a2 2 0 0 1 2 2v2H2v-2a2 2 0 0 1 2-2Z"></path><path d="M12 2v4"></path><path d="M12 6H8a2 2 0 0 1-2-2v0a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-4Z"></path></svg>
+              </sc-if>
+              <sc-if value="{{ insumo.tag == 'Tomate' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8946F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-apple"><path d="M12 22c4.97 0 9-4.03 9-9 0-3.12-1.59-5.87-4-7.5-.47-.32-1-.5-1.5-.5a6 6 0 0 0-4.5 2.02A6 6 0 0 0 6.5 5c-.5 0-1.03.18-1.5.5-2.41 1.63-4 4.38-4 7.5 0 4.97 4.03 9 9 9Z"></path><path d="M12 5V2"></path></svg>
+              </sc-if>
+            </div>
+            <h3 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 28px; line-height: 1.15; margin: 0">{{ insumo.titulo }}</h3>
+            <p style="font-size: 15.5px; line-height: 1.65; color: rgba(244,241,220,0.8); margin: 0">{{ insumo.texto }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SABORES ============ -->
+  <section id="sabores" data-screen-label="Sabores" style="padding: clamp(64px, 9vw, 104px) clamp(20px, 4vw, 48px); max-width: 1200px; margin: 0 auto">
+    <div style="display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 56px; flex-wrap: wrap">
+      <div>
+        <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: #C94F2F">Do nosso forno</span>
+        <h2 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(36px, 4.5vw, 56px); line-height: 1.08; margin: 18px 0 0">Sabores que o forno assina</h2>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: end; gap: 10px">
+        <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(41,76,49,0.7)">Pizza grande · 8 fatias · até 2 sabores · a partir de R$ 44,99</span>
+        <a href="https://app.cardapioweb.com/fornear" target="_blank" rel="noopener" style="text-decoration: none; font-family: Oswald, sans-serif; font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; border-bottom: 2px solid #C94F2F; padding-bottom: 4px; color: #C94F2F">Cardápio completo →</a>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 32px">
+      <sc-for list="{{ sabores }}" as="sabor" hint-placeholder-count="3">
+        <div style="display: flex; flex-direction: column">
+          <div style="aspect-ratio: 1 / 1; border: 1px solid rgba(41,76,49,0.25); overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 20px">
+            <img src="{{ sabor.foto }}" alt="{{ sabor.nome }}" style="width: 100%; height: 100%; object-fit: cover" />
+          </div>
+          <h3 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 26px; margin: 0 0 8px">{{ sabor.nome }}</h3>
+          <p style="font-size: 15px; line-height: 1.6; color: rgba(41,76,49,0.8); margin: 0">{{ sabor.descricao }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ============ SALVA BORDAS ============ -->
+  <section id="salva-bordas" data-screen-label="Salva Bordas" style="background: #C94F2F; color: #F4F1DC; padding: clamp(64px, 9vw, 96px) clamp(20px, 4vw, 48px)">
+    <div style="max-width: 1200px; margin: 0 auto">
+      <div style="display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 64px); align-items: flex-start">
+        <div style="flex: 1 1 300px; min-width: 280px">
+          <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(244,241,220,0.8)">A borda merece</span>
+          <h2 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(36px, 4.5vw, 56px); line-height: 1.08; margin: 18px 0 20px">Salva Bordas</h2>
+          <p style="font-size: 17px; line-height: 1.7; color: rgba(244,241,220,0.9); margin: 0">A borda alveolada é boa demais para sobrar. Peça um pote de 80g e mergulhe cada pedaço — adicione até 4 no seu pedido.</p>
+        </div>
+        <div id="salva-bordas-grid" style="flex: 2 1 520px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 175px), 1fr)); gap: 20px">
+          <sc-for list="{{ salvaBordas }}" as="sb" hint-placeholder-count="3">
+            <div style="background: rgba(244,241,220,0.08); border: 1px solid rgba(244,241,220,0.35); padding: 24px; display: flex; flex-direction: column; gap: 12px">
+              <div style="aspect-ratio: 1 / 1; border: 1px solid rgba(244,241,220,0.3); overflow: hidden; display: flex; align-items: center; justify-content: center">
+                <img src="{{ sb.foto }}" alt="{{ sb.nome }}" style="width: 100%; height: 100%; object-fit: cover" />
+              </div>
+              <h3 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 22px; margin: 8px 0 0">{{ sb.nome }}</h3>
+              <p style="font-size: 14px; line-height: 1.55; color: rgba(244,241,220,0.85); margin: 0; flex: 1">{{ sb.texto }}</p>
+              <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase">{{ sb.preco }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEPOIMENTOS ============ -->
+  <section data-screen-label="Depoimentos" style="background: #EFEBD1; padding: clamp(64px, 9vw, 104px) clamp(20px, 4vw, 48px); border-top: 1px solid rgba(41,76,49,0.15); border-bottom: 1px solid rgba(41,76,49,0.15)">
+    <div style="max-width: 1200px; margin: 0 auto">
+      <div style="text-align: center; margin-bottom: 56px">
+        <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: #C94F2F">Feedbacks</span>
+        <h2 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(36px, 4.5vw, 56px); margin: 18px 0 0">A diferença é notada na primeira mordida</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 24px">
+        <sc-for list="{{ depoimentos }}" as="dep" hint-placeholder-count="3">
+          <figure style="margin: 0; background: #F4F1DC; border: 1px solid rgba(41,76,49,0.2); padding: 32px; display: flex; flex-direction: column; gap: 18px">
+            <span style="font-family: 'DM Serif Display', serif; font-size: 44px; color: #C94F2F; line-height: 0.6">“</span>
+            <blockquote style="margin: 0; font-size: 16.5px; line-height: 1.65; font-style: italic; color: rgba(41,76,49,0.9)">{{ dep.texto }}</blockquote>
+            <figcaption style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(41,76,49,0.65)">{{ dep.autor }}</figcaption>
+          </figure>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ENTREGA / COMO PEDIR ============ -->
+  <section id="entrega" data-screen-label="Entrega" style="padding: clamp(64px, 9vw, 104px) clamp(20px, 4vw, 48px); max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: clamp(36px, 5vw, 64px); align-items: center">
+    <div>
+      <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: #C94F2F">Delivery</span>
+      <h2 style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(36px, 4.5vw, 56px); line-height: 1.08; margin: 18px 0 24px">Entrega em toda Santa Rita e Bayeux</h2>
+      <p style="font-size: 17px; line-height: 1.7; color: rgba(41,76,49,0.85); margin: 0 0 36px; max-width: 46ch">Do nosso forno para a sua casa, quentinha. Pedido direto pelo cardápio digital, sem complicação.</p>
+      <div style="display: flex; flex-direction: column; gap: 0">
+        <sc-for list="{{ passos }}" as="passo" hint-placeholder-count="3">
+          <div style="display: grid; grid-template-columns: 56px 1fr; gap: 20px; align-items: baseline; padding: 20px 0; border-top: 1px solid rgba(41,76,49,0.2)">
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; line-height: 1">
+              <span style="font-family: 'DM Serif Display', serif; font-size: 32px; color: #C94F2F; line-height: 1">{{ passo.num }}</span>
+              <sc-if value="{{ passo.num == '1' }}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C94F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+              </sc-if>
+              <sc-if value="{{ passo.num == '2' }}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C94F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </sc-if>
+              <sc-if value="{{ passo.num == '3' }}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C94F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck"><path d="M14 18H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2Z"></path><path d="M14 9h4l4 4v5H14V9Z"></path><circle cx="7.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              </sc-if>
+            </div>
+            <p style="font-size: 16.5px; line-height: 1.6; margin: 0">{{ passo.texto }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background: #C94F2F; color: #F4F1DC; padding: clamp(36px, 5vw, 56px) clamp(24px, 4vw, 48px); display: flex; flex-direction: column; gap: 24px; text-align: center; align-items: center">
+      <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(244,241,220,0.85)">Peça agora</span>
+      <span style="font-family: 'DM Serif Display', serif; font-size: clamp(32px, 3.5vw, 44px); line-height: 1.1">Sua pizza artesanal a um clique do forno</span>
+      <a href="https://app.cardapioweb.com/fornear" target="_blank" rel="noopener" style="text-decoration: none; background: #F4F1DC; color: #C94F2F; font-family: Oswald, sans-serif; font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; padding: 18px 40px" style-hover="background: #294C31; color: #F4F1DC">app.cardapioweb.com/fornear</a>
+      <span style="font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(244,241,220,0.85)">ou WhatsApp (83) 98769-0157</span>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer data-screen-label="Rodapé" style="background: #294C31; color: #F4F1DC; padding: 64px clamp(20px, 4vw, 48px) 40px">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-family: 'DM Serif Display', serif; font-size: 30px; letter-spacing: 0.02em">FORNEAR</span>
+        <span style="font-family: Oswald, sans-serif; font-size: 10px; letter-spacing: 0.42em; text-transform: uppercase; color: #E8946F">Pizzaria · Artesanal Italiana</span>
+        <span style="font-size: 14px; color: rgba(244,241,220,0.7); margin-top: 12px; font-style: italic">Qualidade não é pressa. É processo.</span>
+      </div>
+      <div style="display: flex; gap: 72px; flex-wrap: wrap">
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14.5px">
+          <span style="font-family: Oswald, sans-serif; font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: #E8946F; margin-bottom: 4px">Contato</span>
+          <span style="color: rgba(244,241,220,0.85)">(83) 98769-0157</span>
+          <a href="https://www.instagram.com/fornear.pizzaria" target="_blank" rel="noopener" style="color: rgba(244,241,220,0.85); text-decoration: none" style-hover="color: #E8946F">@fornear.pizzaria</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14.5px">
+          <span style="font-family: Oswald, sans-serif; font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: #E8946F; margin-bottom: 4px">Funcionamento</span>
+          <span style="color: rgba(244,241,220,0.85)">Terça a domingo · 18h às 23h</span>
+          <span style="color: rgba(244,241,220,0.85)">Santa Rita e Bayeux — PB</span>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1200px; margin: 48px auto 0; padding-top: 24px; border-top: 1px solid rgba(244,241,220,0.2); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-family: Oswald, sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(244,241,220,0.55)">
+      <span>© 2026 Fornear Pizzaria</span>
+      <span>Da Itália para Santa Rita–PB</span>
+    </div>
+  </footer>
+
+  <!-- ============ WHATSAPP FLUTUANTE ============ -->
+  <sc-if value="{{ showWhatsApp }}" hint-placeholder-val="{{ true }}">
+    <a href="https://wa.me/5583987690157" target="_blank" rel="noopener" style="position: fixed; bottom: 28px; right: 28px; z-index: 90; background: #294C31; color: #F4F1DC; font-family: Oswald, sans-serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; padding: 15px 22px; text-decoration: none; box-shadow: 0 6px 20px rgba(41,76,49,0.35); display: flex; align-items: center; gap: 10px" style-hover="background: #C94F2F; color: #F4F1DC">
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: #7FBF6A; display: inline-block"></span>
+      Pedir no WhatsApp
+    </a>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showTopBar&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Elementos&quot; },
+  &quot;showWhatsApp&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Elementos&quot; }
+}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      showTopBar: this.props.showTopBar ?? true,
+      showWhatsApp: this.props.showWhatsApp ?? true,
+      etapas: [
+        { num: '01', titulo: 'Quatro ingredientes', texto: 'Farinha italiana tipo 00, água, sal e fermento. Nada mais entra na nossa massa.' },
+        { num: '02', titulo: 'Longa fermentação', texto: 'A massa descansa por horas até desenvolver leveza, sabor e a estrutura certa. Por isso a produção é limitada: cada dia rende um número finito de massas.' },
+        { num: '03', titulo: 'Abertura manual', texto: 'Cada disco é aberto à mão, preservando o ar da fermentação — é ele que forma a borda alta e alveolada.' },
+        { num: '04', titulo: 'Forno bem aquecido', texto: 'Alta temperatura, tempo preciso. O resultado: borda crocante por fora, interior macio e leve.' }
+      ],
+      insumos: [
+        { tag: 'Farinha', titulo: 'Caputo Pizzeria tipo 00', texto: 'Importada da Itália, de moagem fina, feita para massas de longa fermentação. É onde a leveza da nossa pizza começa.' },
+        { tag: 'Molho', titulo: 'Preparado na casa', texto: 'Não usamos molho pronto. Nosso molho é feito aqui, com tomates pelados italianos — mais natural, menos ácido, naturalmente doce.' },
+        { tag: 'Tomate', titulo: 'Pelados italianos Ciao', texto: 'Tomates da região da Campânia, conservados no próprio suco. Só tomate e sal — sem aromatizantes, sem conservantes.' }
+      ],
+      sabores: [
+        { nome: 'Marguerita', descricao: 'Molho de tomate pelado, muçarela, manjericão, tomate cereja e orégano. A prova de que o simples, bem feito, vence.', foto: 'assets/marguerita.jpg' },
+        { nome: 'Calabresa Tradizionale', descricao: 'Calabresa defumada, cebola roxa e orégano sobre o molho da casa. O clássico no padrão Fornear.', foto: 'assets/calabresa.jpg' },
+        { nome: 'Sol & Bacon', descricao: 'Carne de sol desfiada, bacon e muçarela sobre o molho de tomate pelado. O sabor nordestino no padrão Fornear.', foto: 'assets/solebacon.jpg' }
+      ],
+      salvaBordas: [
+        { nome: 'Nutella Original', preco: '+ R$ 8,00', texto: '80g de Nutella para transformar a borda alveolada em sobremesa.', foto: 'assets/salvanutella.jpg' },
+        { nome: 'Doce de Leite', preco: '+ R$ 4,00', texto: 'Doce de leite Portão Cambuí, cremoso, direto de Minas.', foto: 'assets/salvadoce.jpg' },
+        { nome: 'Cheddar Defumado', preco: '+ R$ 5,00', texto: 'Cheddar extremamente defumado da Polenghi. Passe na borda e sinta a diferença.', foto: 'assets/salvacheddar.jpg' }
+      ],
+      depoimentos: [
+        { texto: 'A melhor pizza que já comi em Santa Rita. A massa é outra coisa — leve, saborosa, não pesa nada.', autor: 'Cliente · Santa Rita' },
+        { texto: 'Dá pra ver a diferença na borda. Chegou quentinha e o molho não tem comparação com pizzaria comum.', autor: 'Cliente · Bayeux' },
+        { texto: 'Grazie! Pedimos toda semana. A margherita com o molho da casa virou ritual de sexta.', autor: 'Cliente · Santa Rita' }
+      ],
+      passos: [
+        { num: '1', texto: 'Acesse o cardápio digital e escolha seus sabores.' },
+        { num: '2', texto: 'Informe seu endereço — atendemos Santa Rita e Bayeux.' },
+        { num: '3', texto: 'Receba em casa, direto do forno, quentinha.' }
+      ]
+    };
+  }
+}
+</script>
+<script>
+  // Delegação de eventos global para o menu hambúrguer responsivo
+  document.addEventListener('click', function(event) {
+    var toggleBtn = event.target.closest('#menu-toggle');
+    if (toggleBtn) {
+      var navMenu = document.getElementById('nav-menu');
+      if (navMenu) {
+        navMenu.classList.toggle('active');
+      }
+      return;
+    }
+    
+    var navLink = event.target.closest('#nav-menu a');
+    if (navLink) {
+      var navMenu = document.getElementById('nav-menu');
+      if (navMenu) {
+        navMenu.classList.remove('active');
+      }
+    }
+  });
+</script>
+</body>
+</html>
